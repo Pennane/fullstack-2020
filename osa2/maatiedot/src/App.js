@@ -51,7 +51,7 @@ const Country = ({ country }) => {
       <img alt={`Flag of ${country.name}`} src={country.flag} height="70" />
       <p>capital {country.capital}</p>
       <p>population {country.population}</p>
-      <h3>Spoken languages</h3>
+      <h3>Official languages</h3>
       <ul>
         {country.languages.map((lang) => (
           <li key={lang.name}>{lang.name}</li>
@@ -73,7 +73,7 @@ const CountryName = ({ name, handleSubmit }) => {
 
 const Countries = ({ countries, showFuction }) => {
   let output
-  if (countries.length > 10) {
+  if (countries.length > 100) {
     output = <p>Too many matches, specify more elaborate filter.</p>
   } else if (countries.length === 1) {
     output = <Country country={countries[0]} />
@@ -116,6 +116,7 @@ const App = () => {
     })
     if (!finlandIndex) return
     if (countries[finlandIndex].weather) return
+    if (!WEATHER_API_KEY) return
     let _countries = [...countries]
     axios.get(`${WEATHER_API_URL}/current?access_key=${WEATHER_API_KEY}&query=Helsinki`).then((res) => {
       _countries[finlandIndex].weather = res.data
@@ -125,7 +126,7 @@ const App = () => {
 
   return (
     <div>
-      <Form inputs={[{ text: 'find coutries', value: filter, handleChange: handleFilterChange }]} />
+      <Form inputs={[{ text: 'find countries', value: filter, handleChange: handleFilterChange }]} />
       <Countries countries={filteredCountries} showFuction={handleShowClick} />
     </div>
   )

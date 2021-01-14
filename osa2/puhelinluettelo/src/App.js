@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import numberService from './services/number'
+
+const Notification = ({ message, type }) => {
+  return (
+    <div className={`notification ${type}`}>
+      <span>{message}</span>
+    </div>
+  )
+}
 
 const Input = ({ text, value, handleChange, type }) => {
   return (
     <div>
       <label>
-        <span>{text}:</span>
+        <span>{text}</span>
         <input type={type} value={value} onChange={handleChange} />
       </label>
     </div>
@@ -24,23 +32,33 @@ const Form = ({ inputs, handleSubmit, heading, submitText }) => {
   )
 }
 
-const PhoneNumber = ({ name, number }) => {
+const PhoneNumber = ({ name, number, id, clickHandler }) => {
   return (
-    <div>
-      <span>
-        {name} {number}
-      </span>
-    </div>
+    <tr>
+      <td>{name}</td>
+      <td>{number}</td>
+      <td>
+        <button onClick={() => clickHandler(id)}>Remove</button>
+      </td>
+    </tr>
   )
 }
 
-const PhoneNumbers = ({ phonenumbers }) => {
+const PhoneNumbers = ({ phonenumbers, clickHandler }) => {
   return (
-    <div>
-      {phonenumbers.map((person) => (
-        <PhoneNumber name={person.name} number={person.number} key={person.name} />
-      ))}
-    </div>
+    <table>
+      <tbody>
+        {phonenumbers.map((person) => (
+          <PhoneNumber
+            name={person.name}
+            number={person.number}
+            id={person.id}
+            key={person.name}
+            clickHandler={clickHandler}
+          />
+        ))}
+      </tbody>
+    </table>
   )
 }
 
@@ -49,26 +67,102 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [notification, setNotification] = useState('')
+  const [notificationType, setNotificationType] = useState('')
+
+  const notify = ({ message, type }) => {
+    setNotification(message)
+    setNotificationType(type)
+    setTimeout(() => {
+      setNotification(null)
+      setNotificationType(null)
+    }, 5000)
+  }
+
+  const isPresent = (name) => persons.find((person) => person.name === name)
+
+  const updateAll = () => {
+    numberService.getAll().then((numbers) => {
+      setPersons(numbers)
+    })
+  }
 
   useEffect(() => {
-    console.log('effect')
-    axios.get('http://localhost:3001/persons').then((res) => {
-      console.log('promise resovled')
-      setPersons(res.data)
-    })
+    updateAll()
   }, [])
-
-  const nameValid = (name) => !persons.some((person) => person.name === name)
 
   const addPerson = (event) => {
     event.preventDefault()
-    if (nameValid(newName)) {
-      setPersons(persons.concat({ name: newName, number: newNumber }))
-      setNewName('')
-      setNewNumber('')
-    } else {
-      alert(`${newName} is already added to phonebook`)
+
+    const personObject = {
+      name: newName,
+      number: newNumber
     }
+
+    let presentPerson = isPresent(newName)
+
+    if (presentPerson) return updatePerson(presentPerson, personObject)
+
+    numberService
+      .add(personObject)
+      .then((numbers) => {
+        setPersons(persons.concat(numbers))
+        notify({
+          message: `Added a new number for ${newName}`,
+          type: `success`
+        })
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch((err) => {
+        notify({
+          message: `Failed to add info for ${newName}`,
+          type: `error`
+        })
+        updateAll()
+      })
+  }
+
+  const updatePerson = (person, newObject) => {
+    numberService
+      .update(person.id, newObject)
+      .then((updated) => {
+        setPersons(persons.map((_person) => (_person.id === person.id ? updated : _person)))
+        notify({
+          message: `Updated number for ${person.name}`,
+          type: `success`
+        })
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch((err) => {
+        notify({
+          message: `Info for ${person.name} had been deleted before update`,
+          type: `error`
+        })
+        updateAll()
+      })
+  }
+
+  const deletePerson = (id) => {
+    let person = persons.find((person) => person.id === id)
+    if (!window.confirm('Do you really want to remove the person from phonebook?')) return
+    numberService
+      .remove(id)
+      .then(() => {
+        notify({
+          message: `Removed ${person.name}'s number`,
+          type: `success`
+        })
+        updateAll()
+      })
+      .catch((err) => {
+        notify({
+          message: `Information of ${person.name} had already been removed`,
+          type: `error`
+        })
+        updateAll()
+      })
   }
 
   const handleNameChange = (event) => {
@@ -88,6 +182,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notification} type={notificationType} />
       <Form
         heading="Filter"
         inputs={[{ type: 'text', text: 'filter shown with', value: filter, handleChange: handleFilterChange }]}
@@ -102,7 +197,7 @@ const App = () => {
         ]}
       />
       <h2>Numbers</h2>
-      <PhoneNumbers phonenumbers={peopleToShow} />
+      <PhoneNumbers phonenumbers={peopleToShow} clickHandler={deletePerson} />
     </div>
   )
 }

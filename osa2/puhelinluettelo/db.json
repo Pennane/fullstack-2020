@@ -1,5 +1,5 @@
 {
-  "persons": [
+  "numbers": [
     {
       "name": "Arto Hellas",
       "number": "040-123456",
@@ -16,8 +16,8 @@
       "id": 3
     },
     {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
+      "name": "Yes Man",
+      "number": "12341234",
       "id": 4
     }
   ]
