@@ -1,0 +1,32 @@
+html {
+  font-family: Arial;
+}
+
+.notification {
+  width: 240px;
+  padding: 20px 16px;
+  margin: 10px 0;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  border-radius: 4px;
+  background: white;
+  color: #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial;
+  visibility: hidden;
+}
+
+.notification.error {
+  background: linear-gradient(0deg, #d7290f, #af2c23);
+  color: white;
+  visibility: visible;
+}
+
+.notification.success {
+  background: linear-gradient(0deg, #2b8e3b, #427d36);
+  color: white;
+  visibility: visible;
+}

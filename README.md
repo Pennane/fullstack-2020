@@ -14,3 +14,7 @@ Osat:
   - [kurssitiedot](/osa2/kurssitiedot)
   - [puhelinluettelo](/osa2/puhelinluettelo)
   - [maatiedot](/osa2/maatiedot)
+- [osa 3](/osa3)
+  - [puhelinluettelo-frontend](/osa3/puhelinluettelo-frontend)
+  - [puhelinluettelo-backend](https://github.com/Pennane/fullstack-2020-part3)
+  - [puhelinluettelo verkossa](https://pure-waters-34987.herokuapp.com/)
