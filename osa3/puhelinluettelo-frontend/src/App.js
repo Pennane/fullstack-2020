@@ -95,8 +95,8 @@ const App = () => {
     event.preventDefault()
 
     const personObject = {
-      name: newName,
-      number: newNumber
+      name: newName.trim(),
+      number: newNumber.trim()
     }
 
     let presentPerson = isPresent(newName)
