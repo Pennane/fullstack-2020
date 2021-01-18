@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import numberService from './services/number'
 
-const Notification = ({ message, type }) => {
+const Notification = ({ name, message, type }) => {
   return (
     <div className={`notification ${type}`}>
-      <span>{message}</span>
+      <span className="name">{name}</span>
+      {message && <span className="message">{message}</span>}
     </div>
   )
 }
 
-const Input = ({ text, value, handleChange, type }) => {
+const Input = ({ id, text, value, handleChange, type }) => {
   return (
-    <div>
-      <label>
-        <span>{text}</span>
-        <input type={type} value={value} onChange={handleChange} />
-      </label>
-    </div>
+    <tr>
+      <td>
+        <label htmlFor={id}>
+          <span>{text}</span>
+        </label>
+      </td>
+      <td>
+        <input id={id} type={type} value={value} onChange={handleChange} />
+      </td>
+    </tr>
   )
 }
 
@@ -24,9 +29,21 @@ const Form = ({ inputs, handleSubmit, heading, submitText }) => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>{heading}</h2>
-      {inputs.map((input, i) => (
-        <Input key={i} type={input.type} text={input.text} value={input.value} handleChange={input.handleChange} />
-      ))}
+      <table>
+        <tbody>
+          {inputs.map((input, i) => (
+            <Input
+              key={input.text + i}
+              id={input.text + i}
+              type={input.type}
+              text={input.text}
+              value={input.value}
+              handleChange={input.handleChange}
+            />
+          ))}
+        </tbody>
+      </table>
+
       {handleSubmit && <button type="submit">{submitText}</button>}
     </form>
   )
@@ -67,14 +84,17 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
-  const [notification, setNotification] = useState('')
+  const [notificationName, setNotificationName] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState('')
   const [notificationType, setNotificationType] = useState('')
 
-  const notify = ({ message, type }) => {
-    setNotification(message)
+  const notify = ({ name, message, type }) => {
+    setNotificationMessage(message)
+    setNotificationName(name)
     setNotificationType(type)
     setTimeout(() => {
-      setNotification(null)
+      setNotificationMessage(null)
+      setNotificationName(null)
       setNotificationType(null)
     }, 5000)
   }
@@ -108,7 +128,7 @@ const App = () => {
       .then((numbers) => {
         setPersons(persons.concat(numbers))
         notify({
-          message: `Added a new number for ${newName}`,
+          name: `Added a number for ' ${newName} '`,
           type: `success`
         })
         setNewName('')
@@ -116,7 +136,8 @@ const App = () => {
       })
       .catch((err) => {
         notify({
-          message: `Failed to add info for ${newName}`,
+          name: `Failed to add info for ' ${newName} '`,
+          message: err?.response?.data?.error,
           type: `error`
         })
         updateAll()
@@ -129,7 +150,7 @@ const App = () => {
       .then((updated) => {
         setPersons(persons.map((_person) => (_person.id === person.id ? updated : _person)))
         notify({
-          message: `Updated number for ${person.name}`,
+          name: `Updated number for ' ${person.name} '`,
           type: `success`
         })
         setNewName('')
@@ -137,7 +158,8 @@ const App = () => {
       })
       .catch((err) => {
         notify({
-          message: `Info for ${person.name} had been deleted before update`,
+          name: `Failed to update info for ' ${person.name} '`,
+          message: err?.response?.data?.error,
           type: `error`
         })
         updateAll()
@@ -151,14 +173,15 @@ const App = () => {
       .remove(id)
       .then(() => {
         notify({
-          message: `Removed ${person.name}'s number`,
+          name: `Removed number for ' ${person.name} '`,
           type: `success`
         })
         updateAll()
       })
       .catch((err) => {
         notify({
-          message: `Information of ${person.name} had already been removed`,
+          name: `Failed to delete data for ' ${person.name} '`,
+          message: err?.response?.data?.error,
           type: `error`
         })
         updateAll()
@@ -182,7 +205,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={notification} type={notificationType} />
+      <Notification name={notificationName} message={notificationMessage} type={notificationType} />
       <Form
         heading="Filter"
         inputs={[{ type: 'text', text: 'filter shown with', value: filter, handleChange: handleFilterChange }]}
