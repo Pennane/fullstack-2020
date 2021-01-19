@@ -18,3 +18,6 @@ Osat:
   - [puhelinluettelo-frontend](/osa3/puhelinluettelo-frontend)
   - [puhelinluettelo-backend](https://github.com/Pennane/fullstack-2020-part3)
   - [puhelinluettelo verkossa](https://pure-waters-34987.herokuapp.com/)
+ - [osa 4](/osa4)
+  - [blogilista-backend](https://github.com/Pennane/fullstack-2020/tree/main/osa4/blogilista-backend)
+
