@@ -1,12 +1,15 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const blogsInDb = async () => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).exec()
   return blogs.map((blog) => blog.toJSON())
 }
 
@@ -31,19 +34,26 @@ let initialBlogs = [
   }
 ]
 
-beforeEach(async () => {
-  await Blog.deleteMany({})
-  for (blogObject of initialBlogs) {
-    let blog = new Blog(blogObject)
-    await blog.save()
+beforeEach(async (done) => {
+  try {
+    await Blog.deleteMany({})
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('password', 10)
+    const user = new User({ username: 'root', passwordHash })
+    const savedUser = await user.save()
+
+    for (blogObject of initialBlogs) {
+      let blog = new Blog({ ...blogObject, user: savedUser.id })
+      await blog.save()
+    }
+  } catch (error) {
+  } finally {
+    done()
   }
 })
 
 describe('displaying blogs', () => {
-  afterAll(() => {
-    mongoose.connection.close()
-  })
-
   test('a right amount of blogs is returned', async () => {
     const response = await api.get('/api/blogs')
     expect(response.body.length).toBe(initialBlogs.length)
@@ -59,7 +69,7 @@ describe('displaying blogs', () => {
 })
 
 describe('adding blogs', () => {
-  test('a new blog can be added', async () => {
+  test('a new blog can  be added with a token', async () => {
     const newBlog = {
       title: 'Testi Blogi68',
       author: 'Matti Möttönen',
@@ -67,8 +77,18 @@ describe('adding blogs', () => {
       likes: 15
     }
 
+    const user = await User.findOne({})
+
+    const userForToken = {
+      username: 'root',
+      id: user.id
+    }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
     await await api
       .post('/api/blogs')
+      .set('Authorization', 'Bearer ' + token)
       .send(newBlog)
       .expect(200)
       .expect('Content-Type', /application\/json/)
@@ -80,6 +100,27 @@ describe('adding blogs', () => {
     expect(hasNewTitle).toBeTruthy()
   })
 
+  test('a new blog can not be added without a token', async () => {
+    const newBlog = {
+      title: 'Testi Blogi68',
+      author: 'Matti Möttönen',
+      url: '127.0.0.1',
+      likes: 15
+    }
+
+    await await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await blogsInDb()
+    expect(blogsAtEnd.length).toBe(initialBlogs.length)
+
+    const hasNewTitle = blogsAtEnd.find((blog) => blog.title === newBlog.title)
+    expect(hasNewTitle).toBeFalsy()
+  })
+
   test('a new blog with undefined likes gets defined with 0 likes', async () => {
     const newBlogWithNoLikes = {
       title: 'Testi Blogi68',
@@ -87,7 +128,20 @@ describe('adding blogs', () => {
       url: '127.0.0.1'
     }
 
-    const response = await api.post('/api/blogs').send(newBlogWithNoLikes)
+    const user = await User.findOne({})
+
+    const userForToken = {
+      username: 'root',
+      id: user.id
+    }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
+    let response = await api
+      .post('/api/blogs')
+      .set('Authorization', 'Bearer ' + token)
+      .send(newBlogWithNoLikes)
+
     expect(response.body.likes).toBe(0)
   })
 
@@ -110,17 +164,50 @@ describe('adding blogs', () => {
       likes: 10
     }
 
-    await api.post('/api/blogs').send(newBlogWithNoTitle).expect(400)
-    await api.post('/api/blogs').send(newBlogWithNoLink).expect(400)
-    await api.post('/api/blogs').send(newBlogWithNeither).expect(400)
+    const user = await User.findOne({})
+
+    const userForToken = {
+      username: 'root',
+      id: user.id
+    }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
+    await api
+      .post('/api/blogs')
+      .set('Authorization', 'Bearer ' + token)
+      .send(newBlogWithNoTitle)
+      .expect(400)
+    await api
+      .post('/api/blogs')
+      .set('Authorization', 'Bearer ' + token)
+      .send(newBlogWithNoLink)
+      .expect(400)
+    await api
+      .post('/api/blogs')
+      .set('Authorization', 'Bearer ' + token)
+      .send(newBlogWithNeither)
+      .expect(400)
   })
 })
 
 describe('removing blogs', () => {
   test('removing a blog by id removes the blog and responds with 204', async () => {
+    const user = await User.findOne({})
+
+    const userForToken = {
+      username: 'root',
+      id: user.id
+    }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
     const blogsBeforeRemove = await blogsInDb()
 
-    await api.delete(`/api/blogs/${blogsBeforeRemove[0].id}`).expect(204)
+    await api
+      .delete(`/api/blogs/${blogsBeforeRemove[0].id}`)
+      .set('Authorization', 'Bearer ' + token)
+      .expect(204)
 
     const newBlogs = await blogsInDb()
 
@@ -132,18 +219,51 @@ describe('removing blogs', () => {
   })
 
   test('removing a blog that does not exist responds with 400 and content stays', async () => {
-    await api.delete('/api/blogs/idthatdoesnotexist').expect(400)
+    const user = await User.findOne({})
+
+    const userForToken = {
+      username: 'root',
+      id: user.id
+    }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
+    await api
+      .delete('/api/blogs/idthatdoesnotexist')
+      .set('Authorization', 'Bearer ' + token)
+      .expect(400)
     const blogs = await blogsInDb()
     expect(blogs).toHaveLength(initialBlogs.length)
   })
 
   test('trying to remove without id responds with 400', async () => {
-    await api.delete('/api/blogs/').expect(400)
+    const user = await User.findOne({})
+
+    const userForToken = {
+      username: 'root',
+      id: user.id
+    }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
+    await api
+      .delete('/api/blogs/')
+      .set('Authorization', 'Bearer ' + token)
+      .expect(400)
   })
 })
 
 describe('updating blogs', () => {
   test('update a blog with new likes and title', async () => {
+    const user = await User.findOne({})
+
+    const userForToken = {
+      username: 'root',
+      id: user.id
+    }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
     const blogsBeforeUpdate = await blogsInDb()
 
     const oldBlog = blogsBeforeUpdate[0]
@@ -153,7 +273,11 @@ describe('updating blogs', () => {
       title: 'Testi Blogi'
     }
 
-    await api.put(`/api/blogs/${oldBlog.id}`).send(updatedBlogData).expect(200)
+    await api
+      .put(`/api/blogs/${oldBlog.id}`)
+      .set('Authorization', 'Bearer ' + token)
+      .send(updatedBlogData)
+      .expect(200)
 
     const blogsAfterUpdate = await blogsInDb()
 
@@ -173,7 +297,20 @@ describe('updating blogs', () => {
       nonesense: 'blaah'
     }
 
-    await api.put(`/api/blogs/${oldBlog.id}`).send(updatedBlogData).expect(200)
+    const user = await User.findOne({})
+
+    const userForToken = {
+      username: 'root',
+      id: user.id
+    }
+
+    const token = jwt.sign(userForToken, process.env.SECRET)
+
+    await api
+      .put(`/api/blogs/${oldBlog.id}`)
+      .set('Authorization', 'Bearer ' + token)
+      .send(updatedBlogData)
+      .expect(200)
 
     const blogsAfterUpdate = await blogsInDb()
 
@@ -184,4 +321,9 @@ describe('updating blogs', () => {
     expect(updatedBlog.author).toBe(oldBlog.author)
     expect(updatedBlog.url).toBe(oldBlog.url)
   })
+})
+
+afterAll((done) => {
+  mongoose.connection.close()
+  done()
 })
