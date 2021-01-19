@@ -1,0 +1,8 @@
+PUT http://localhost:3003/api/blogs/6006ba551128ef4355d82068
+Content-Type: application/json
+
+{
+    "title": "Testi Blogi",
+    "author": "Mattiina Meikäläinen",
+    "nonesense": "please ignore me"
+}
