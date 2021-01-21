@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import CreateBlog from './components/CreateBlog'
-import ErrorMessage from './components/ErrorMessage'
+import Notification from './components/Notification'
 import CurrentUser from './components/CurrentUser'
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -12,10 +12,12 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
   const [newBlogTitle, setNewBlogTitle] = useState('')
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
   const [newBlogUrl, setNewBlogUrl] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState('')
+  const [notificationName, setNotificationName] = useState('')
+  const [notificationType, setNotificationType] = useState('')
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -29,6 +31,17 @@ const App = () => {
       blogService.setToken(user.token)
     }
   }, [])
+
+  const pushLocalNotification = ({ name, message, type }) => {
+    setNotificationMessage(message)
+    setNotificationName(name)
+    setNotificationType(type)
+    setTimeout(() => {
+      setNotificationMessage(null)
+      setNotificationName(null)
+      setNotificationType(null)
+    }, 5300)
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -46,11 +59,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      pushLocalNotification({ name: 'Success', message: 'Logged in as ' + user.username, type: 'success' })
     } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      pushLocalNotification({ name: 'Error', message: 'Wrong username or password', type: 'error' })
     }
   }
 
@@ -61,11 +72,13 @@ const App = () => {
     setPassword('')
     blogService.setToken(null)
     window.localStorage.removeItem('loggedUser')
+    pushLocalNotification({ name: 'Logged out', type: 'success' })
   }
 
   const handleUsernameChange = (value) => {
     setUsername(value)
   }
+
   const handlePasswordChange = (value) => {
     setPassword(value)
   }
@@ -79,11 +92,9 @@ const App = () => {
       setNewBlogTitle('')
       setNewBlogAuthor('')
       setNewBlogUrl('')
+      pushLocalNotification({ name: 'Added a blog', type: 'success' })
     } catch (exception) {
-      setErrorMessage('Failed to add new blog')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      pushLocalNotification({ name: 'Error', message: 'Failed to add a new blog', type: 'error' })
     }
   }
 
@@ -91,7 +102,7 @@ const App = () => {
     return (
       <div>
         <h1>Blogs</h1>
-        <ErrorMessage message={errorMessage} />
+        <Notification message={notificationMessage} name={notificationName} type={notificationType} />
         <LoginForm
           username={username}
           password={password}
@@ -106,7 +117,7 @@ const App = () => {
   return (
     <div>
       <h1>Blogs</h1>
-      <ErrorMessage message={errorMessage} />
+      <Notification message={notificationMessage} name={notificationName} type={notificationType} />
       <CurrentUser user={user} handleLogout={handleLogout} />
       <CreateBlog
         submitValues={{
