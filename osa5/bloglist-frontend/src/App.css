@@ -2,6 +2,15 @@ html {
   font-family: Arial;
 }
 
+form {
+  margin-bottom: 0.3em;
+}
+
+.createBlog {
+  margin-bottom: 1.5em;
+  margin-top: 1em;
+}
+
 .notificationWrapper {
   position: absolute;
   top: 0;
@@ -51,4 +60,50 @@ html {
   background: linear-gradient(0deg, #2b8e3b, #427d36);
   color: white;
   visibility: visible;
+}
+
+.blog {
+  border: 1px solid black;
+  margin: 0.3em 0;
+  padding: 0.2em 0.5em;
+  padding-bottom: 0.6em;
+  width: 300px;
+}
+
+.blog .header {
+  display: flex;
+  align-items: baseline;
+}
+
+.blog .header h5,
+.blog .header h6 {
+  margin: 0.3em 0;
+  margin-right: 0.2em;
+}
+
+.blog .header h6 {
+  font-weight: 400;
+}
+
+.blog .likes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.blog .poster {
+  color: #7b7e97;
+  font-style: italic;
+  font-size: 0.95em;
+  margin-bottom: 0.5em;
+  margin-top: 0.2em;
+}
+
+.blog .extended {
+  font-size: 0.9em;
+  margin-bottom: 1em;
+}
+
+.blog .likes button {
+  margin: 0.2em;
 }

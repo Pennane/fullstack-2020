@@ -15,23 +15,12 @@ const Input = ({ id, text, value, handleChange, type }) => {
   )
 }
 
-const Form = ({ inputs, handleSubmit, heading, submitText }) => {
+const Form = ({ handleSubmit, heading, submitText, children }) => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>{heading}</h2>
       <table>
-        <tbody>
-          {inputs.map((input, i) => (
-            <Input
-              key={i}
-              id={input.text + '-' + i}
-              type={input.type}
-              text={input.text}
-              value={input.value}
-              handleChange={input.handleChange}
-            />
-          ))}
-        </tbody>
+        <tbody>{children}</tbody>
       </table>
 
       {handleSubmit && <button type="submit">{submitText}</button>}
@@ -39,4 +28,4 @@ const Form = ({ inputs, handleSubmit, heading, submitText }) => {
   )
 }
 
-export default Form
+export { Form, Input }

@@ -1,8 +1,44 @@
 import React from 'react'
-const Blog = ({ blog }) => (
-  <div>
-    {blog.title} {blog.author}
-  </div>
-)
+import Togglable from './Togglable'
+
+const Blog = ({ blog, likeBlog, deleteBlog }) => {
+  let { title, author, url, user, likes } = blog
+
+  const confirmDelete = (blog) => {
+    let confirmed = window.confirm(`Are you sure you want to remove blog '${blog.title}' from '${blog.author}'?`)
+    if (confirmed) {
+      deleteBlog(blog)
+    }
+  }
+
+  const extendedView = (
+    <div className="extended">
+      <a href={url} target="_blank">
+        {url}
+      </a>
+      <div className="likes">
+        <span>Likes: {likes}</span>
+        <button onClick={() => likeBlog(blog)}>like</button>
+      </div>
+      <div className="poster">
+        <span>{user.name}</span>
+      </div>
+      <div className="remove">
+        <button onClick={() => confirmDelete(blog)}>Delete</button>
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="blog">
+      <div className="header">
+        <h5>{title}</h5> <h6>{author}</h6>
+      </div>
+      <Togglable showLabel="view" hideLabel="close" buttonPlacement="before">
+        {extendedView}
+      </Togglable>
+    </div>
+  )
+}
 
 export default Blog
