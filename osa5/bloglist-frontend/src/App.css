@@ -2,6 +2,17 @@ html {
   font-family: Arial;
 }
 
+.notificationWrapper {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  box-sizing: border-box;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .notification {
   width: 240px;
   padding: 4px 16px;
