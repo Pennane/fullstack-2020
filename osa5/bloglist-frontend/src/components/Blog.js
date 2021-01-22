@@ -13,15 +13,17 @@ const Blog = ({ blog, likeBlog, deleteBlog, currentUser }) => {
 
   const extendedView = (
     <div className="extended">
-      <a href={url} target="_blank">
-        {url}
-      </a>
+      <a href={url} target="_blank"></a>
       <div className="likes">
-        <span>Likes: {likes}</span>
-        <button onClick={() => likeBlog(blog)}>like</button>
+        <span>
+          Likes: <span className="likesValue">{likes}</span>
+        </span>
+        <button className="likeButton" onClick={() => likeBlog(blog)}>
+          like
+        </button>
       </div>
       <div className="poster">
-        <span>{user.name}</span>
+        <span>{user.name || user.username}</span>
       </div>
       {currentUser.name === blog.user.name && (
         <div className="remove">

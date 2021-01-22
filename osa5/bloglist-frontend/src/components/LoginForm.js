@@ -18,8 +18,8 @@ const LoginForm = ({ login }) => {
   }
 
   return (
-    <Togglable showLabel="Log in">
-      <Form handleSubmit={handleLogin} heading="Login" submitText="Login">
+    <Togglable id="login" showLabel="Log in" initiallyOpen={true}>
+      <Form handleSubmit={handleLogin} heading="Login" submitText="Login" submitId="login-button">
         <Input
           text="username"
           value={username}

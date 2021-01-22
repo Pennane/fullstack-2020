@@ -25,7 +25,7 @@ Input.propTypes = {
   handleChange: PropTypes.func.isRequired
 }
 
-const Form = ({ handleSubmit, heading, submitText, children }) => {
+const Form = ({ handleSubmit, heading, submitText, submitId, children }) => {
   return (
     <form onSubmit={handleSubmit}>
       {heading && <h2>{heading}</h2>}
@@ -33,7 +33,11 @@ const Form = ({ handleSubmit, heading, submitText, children }) => {
         <tbody>{children}</tbody>
       </table>
 
-      {handleSubmit && <button type="submit">{submitText}</button>}
+      {handleSubmit && (
+        <button id={submitId} type="submit">
+          {submitText}
+        </button>
+      )}
     </form>
   )
 }
