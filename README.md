@@ -24,3 +24,4 @@ Osat:
   - [blogilista-frontend](/osa5/bloglist-frontend)
 - [osa 6](/osa6)
   - [unicafe-redux](/osa6/unicafe-redux)
+  - [redux-anecdotes](/osa6/redux-anecdotes)
