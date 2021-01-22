@@ -4,7 +4,7 @@ import counterReducer from './reducer'
 describe('unicafe reducer', () => {
   const initialState = {
     good: 0,
-    ok: 0,
+    neutral: 0,
     bad: 0
   }
 
@@ -20,7 +20,7 @@ describe('unicafe reducer', () => {
 
   test('good is incremented', () => {
     const action = {
-      type: 'GOOD'
+      type: 'INCREMENT_GOOD'
     }
     const state = initialState
 
@@ -28,14 +28,14 @@ describe('unicafe reducer', () => {
     const newState = counterReducer(state, action)
     expect(newState).toEqual({
       good: 1,
-      ok: 0,
+      neutral: 0,
       bad: 0
     })
   })
 
-  test('ok is incremented', () => {
+  test('neutral is incremented', () => {
     const action = {
-      type: 'OK'
+      type: 'INCREMENT_NEUTRAL'
     }
     const state = initialState
 
@@ -43,14 +43,14 @@ describe('unicafe reducer', () => {
     const newState = counterReducer(state, action)
     expect(newState).toEqual({
       good: 0,
-      ok: 1,
+      neutral: 1,
       bad: 0
     })
   })
 
   test('bad is incremented', () => {
     const action = {
-      type: 'BAD'
+      type: 'INCREMENT_BAD'
     }
     const state = initialState
 
@@ -58,18 +58,18 @@ describe('unicafe reducer', () => {
     const newState = counterReducer(state, action)
     expect(newState).toEqual({
       good: 0,
-      ok: 0,
+      neutral: 0,
       bad: 1
     })
   })
 
   test('zero resets', () => {
     const action = {
-      type: 'ZERO'
+      type: 'RESET_STATE'
     }
     const state = {
       good: 100,
-      ok: 100,
+      neutral: 100,
       bad: 100
     }
 
@@ -77,7 +77,7 @@ describe('unicafe reducer', () => {
     const newState = counterReducer(state, action)
     expect(newState).toEqual({
       good: 0,
-      ok: 0,
+      neutral: 0,
       bad: 0
     })
   })
