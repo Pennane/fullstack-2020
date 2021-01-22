@@ -5,7 +5,12 @@ const Blog = require('../models/blog')
 const User = require('../models/user')
 
 router.get('/', async (request, response) => {
-  const Blogs = await Blog.find({}).populate('user')
+  const Blogs = await Blog.find({}).populate({
+    path: 'user',
+    populate: {
+      path: 'blogs'
+    }
+  })
   response.json(Blogs.map((blog) => blog.toJSON()))
 })
 
@@ -92,6 +97,8 @@ router.delete('/:id', async (request, response) => {
   const user = await User.findById(decodedToken.id)
 
   await Blog.findByIdAndDelete(id)
+  console.log('id', id)
+  console.log(user.blogs)
   user.blogs = user.blogs.filter((blogId) => blogId !== id)
   await user.save()
   response.status(204).end()

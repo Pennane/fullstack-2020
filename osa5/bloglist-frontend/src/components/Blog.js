@@ -1,7 +1,7 @@
 import React from 'react'
 import Togglable from './Togglable'
 
-const Blog = ({ blog, likeBlog, deleteBlog }) => {
+const Blog = ({ blog, likeBlog, deleteBlog, currentUser }) => {
   let { title, author, url, user, likes } = blog
 
   const confirmDelete = (blog) => {
@@ -23,9 +23,11 @@ const Blog = ({ blog, likeBlog, deleteBlog }) => {
       <div className="poster">
         <span>{user.name}</span>
       </div>
-      <div className="remove">
-        <button onClick={() => confirmDelete(blog)}>Delete</button>
-      </div>
+      {currentUser.name === blog.user.name && (
+        <div className="remove">
+          <button onClick={() => confirmDelete(blog)}>Delete</button>
+        </div>
+      )}
     </div>
   )
 
