@@ -7,7 +7,7 @@ const Notification = () => {
     border: 'solid',
     padding: 10,
     borderWidth: 1,
-    minHeight: 24,
+    minHeight: 30,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center'
