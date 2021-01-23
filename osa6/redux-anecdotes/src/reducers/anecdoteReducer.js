@@ -42,16 +42,10 @@ const reducer = (state = initialState, action) => {
         ...toChange,
         votes: toChange.votes + 1
       }
-      console.log('bef0re')
-      console.log([...state])
-      console.log('after')
-      console.log(sortAnecdotes([...state]))
-
       return sortAnecdotes(state.map((a) => (a.id === id ? updated : a)))
     default:
+      return state
   }
-
-  return state
 }
 
 export const createAnecdote = (anecdote) => {
