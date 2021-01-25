@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbm5hbmVuIiwiaWQiOiI2MDA3MWViNmEzZTYwNjg3MzQ0NjE1YzIiLCJpYXQiOjE2MTEwNzk1NTF9.rwTUV9N7XFyBd6rsDwf9GmrU7ByE9Mm3rdkHI9C4WNs
+
+{
+    "title": "Täysin uusi kaunokainen",
+    "author": "Matti Meikäläinen",
+    "url": "./",
+    "likes": 0
+}
