@@ -1,3 +1,141 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+body {
+    font-family: 'Inter';
+}
+
+h1 {
+    font-weight: 600;
+    margin-top: 1.3rem;
+}
+
+h3 {
+    font-weight: 300;
+}
+h4 {
+    font-size: 1.125rem;
+}
+
+.router-view {
+    margin-bottom: 5em;
+}
+
+.likes {
+    margin-bottom: 2em;
+    margin-top: 0.7em;
+}
+
+.likeButton {
+    font-size: 0.9em;
+    padding: 0.3em 0.7em !important;
+}
+
+.poster {
+    font-size: 0.8em;
+
+    margin-bottom: 2em;
+
+    font-style: italic;
+}
+
+.createBlogForm {
+    background: #f9f9f9;
+    padding: 1em 1.5em;
+    max-width: 480px;
+    margin-top: 1em;
+    margin-bottom: 0.8em;
+}
+
+.blog {
+    margin-top: 1em;
+}
+
+.comments {
+    margin-top: 1em;
+}
+
+.comments .list-group {
+    max-width: 440px;
+}
+
+.comments .list-group .list-group-item {
+    border-radius: 0;
+    background-color: #fefefe;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.commentform {
+    max-width: 400px;
+    margin-bottom: 1em;
+}
+
+.commentform .form-group {
+    margin-bottom: 0.3em;
+}
+
+.commentform .btn {
+    font-size: 0.83em;
+}
+
+.navbar-text {
+    font-size: 0.9em;
+    text-align: right;
+}
+
+.loginform .form-group {
+    margin-bottom: 0;
+}
+
+.notificationWrapper {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.notification {
+    width: 240px;
+    padding: 6px 12px;
+    margin: 10px 0;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    border-radius: 4px;
+    background: white;
+    color: #000000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: Arial;
+    visibility: hidden;
+}
+
+.notification p {
+    margin: 0;
+    text-align: center;
+    font-weight: 300;
+    font-size: 1.1em;
+}
+
+.notification.error {
+    background: linear-gradient(0deg, #d7290f, #af2c23);
+    color: white;
+    visibility: visible;
+}
+
+.notification.success {
+    background: linear-gradient(0deg, #2b8e3b, #427d36);
+    color: white;
+    visibility: visible;
+}
+
+@media screen and (max-width: 600px) {
+    .navbar-text {
+        font-size: 0.8em;
+    }
+}

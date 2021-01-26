@@ -1,0 +1,7 @@
+POST http://localhost:3001/api/comments/600f0df84439fd77c851aac2
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBlbm5hbmVuIiwiaWQiOiI2MDA3MWViNmEzZTYwNjg3MzQ0NjE1YzIiLCJpYXQiOjE2MTE2MTAxMDJ9.iTBRGNdtRYMk9EU-G_DJECCcKx_U9Wtcff5aXltNApI
+
+{
+    "text": "testikommentti"
+}

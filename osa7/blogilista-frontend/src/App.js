@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { initializeWithToken } from './reducers/loginReducer'
 import { initializeUsers } from './reducers/userReducer'
 import { initializeBlogs } from './reducers/blogReducer'
+import { Container } from 'react-bootstrap'
 
 import RouterView from './router/routes'
 
@@ -24,21 +25,22 @@ const App = () => {
 
     const user = useSelector((state) => state.currentUser)
 
-    if (user === null) {
-        return (
-            <div>
-                <h1>Blogs</h1>
-                <Notification />
-                <LoginForm />
-            </div>
-        )
-    }
-
     return (
         <div>
             <Navigation />
             <Notification />
-            <RouterView />
+            {user && (
+                <Container className="router-view">
+                    <h1>Blog app</h1>
+                    <RouterView />
+                </Container>
+            )}
+            {!user && (
+                <Container>
+                    <h1>Blogs app</h1>
+                    <LoginForm />
+                </Container>
+            )}
         </div>
     )
 }

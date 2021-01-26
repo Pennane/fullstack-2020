@@ -1,18 +1,29 @@
 import React from 'react'
 import { logout } from '../reducers/loginReducer'
+import { createNotification } from '../reducers/notificationReducer'
 import { useSelector, useDispatch } from 'react-redux'
+import { Button, Form, Navbar } from 'react-bootstrap'
 
 const CurrentUser = () => {
-    const dipatch = useDispatch()
+    const dispatch = useDispatch()
     const currentUser = useSelector((state) => state.currentUser)
     const handleLogout = () => {
-        dipatch(logout())
+        dispatch(logout())
+        dispatch(createNotification({ message: `Logged out'` }, 5000))
     }
+    if (!currentUser) {
+        return null
+    }
+
     return (
-        <span>
-            <span>Logged in as {currentUser.name}</span>
-            <button onClick={handleLogout}>Log out</button>
-        </span>
+        <Navbar.Collapse className="justify-content-end">
+            <Navbar.Text>Logged in as {currentUser.name}</Navbar.Text>
+            <Form className="mb-0 ml-2" inline>
+                <Button variant="outline-primary" onClick={handleLogout}>
+                    Logout
+                </Button>
+            </Form>
+        </Navbar.Collapse>
     )
 }
 

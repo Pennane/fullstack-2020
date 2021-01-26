@@ -1,5 +1,6 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
+const commentBaseUrl = '/api/comments'
 
 let token = null
 
@@ -47,6 +48,15 @@ const like = async (blogObject) => {
     }
 }
 
-const blogService = { getAll, create, remove, like, setToken }
+const comment = async ({ blog, text }) => {
+    const config = {
+        headers: { Authorization: token }
+    }
+
+    const response = await axios.post(`${commentBaseUrl}/${blog.id}`, { text }, config)
+    return response.data
+}
+
+const blogService = { getAll, create, remove, like, setToken, comment }
 
 export default blogService

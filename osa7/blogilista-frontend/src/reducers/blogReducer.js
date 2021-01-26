@@ -21,6 +21,11 @@ const reducer = (state = [], action) => {
             return sortBlogs(state.filter((blog) => blog.id !== action.payload))
         case 'UPDATE':
             return sortBlogs(state.map((blog) => (blog.id === action.payload.id ? action.payload : blog)))
+        case 'COMMENT':
+            let comment = action.payload.comment
+            let blog = state.find((b) => b.id === action.payload.blog.id)
+            blog.comments.push(comment)
+            return sortBlogs(state.map((b) => (b.id === blog.id ? blog : b)))
         default:
             return state
     }
@@ -62,6 +67,19 @@ export const likeBlog = (blog) => {
         dispatch({
             type: 'UPDATE',
             payload: updatedBlog
+        })
+    }
+}
+
+export const sendComment = ({ blog, text }) => {
+    return async (dispatch) => {
+        const comment = await blogService.comment({ blog, text })
+        dispatch({
+            type: 'COMMENT',
+            payload: {
+                blog,
+                comment
+            }
         })
     }
 }

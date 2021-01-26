@@ -1,7 +1,7 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
-import DefaultView from '../views/DefaultView'
+import Blogs from '../views/Blogs'
 import User from '../views/User'
 import Users from '../views/Users'
 import Blog from '../views/Blog'
@@ -19,7 +19,7 @@ const Routes = () => {
                 <Users />
             </Route>
             <Route path="/">
-                <DefaultView />
+                <Blogs />
             </Route>
         </Switch>
     )

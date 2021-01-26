@@ -3,14 +3,14 @@ import React from 'react'
 import BlogList from '../components/BlogList'
 import CreateBlog from '../components/CreateBlog'
 
-const DefaultView = () => {
+const Blogs = () => {
     return (
         <div>
-            <h1>Blogs</h1>
+            <h2>List of all known blogs</h2>
             <BlogList />
             <CreateBlog />
         </div>
     )
 }
 
-export default DefaultView
+export default Blogs

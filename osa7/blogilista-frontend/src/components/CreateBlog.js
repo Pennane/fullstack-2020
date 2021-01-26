@@ -2,8 +2,11 @@ import React from 'react'
 import Togglable from './Togglable'
 import { createBlog } from '../reducers/blogReducer'
 import { updateUser } from '../reducers/userReducer'
+import { createNotification } from '../reducers/notificationReducer'
+
 import { useDispatch, useSelector } from 'react-redux'
 import { useField } from '../hooks'
+import { Button, Form } from 'react-bootstrap'
 
 const CreateBlog = ({ passRef }) => {
     const dispatch = useDispatch()
@@ -28,28 +31,41 @@ const CreateBlog = ({ passRef }) => {
         }
         dispatch(createBlog(blogObject))
         dispatch(updateUser(currentUser.id))
+        dispatch(
+            createNotification(
+                {
+                    message: `Added blog '${blogObject.title}'`
+                },
+                5000
+            )
+        )
         resetBlogForm()
     }
 
     return (
-        <div className="createBlog">
-            <Togglable showLabel="Create a new blog" ref={passRef}>
-                <form heading="Create new" onSubmit={handleNewBlog}>
-                    <label htmlFor="new-blog-title">
-                        <span>Title</span>
-                        <input {...content} />
-                    </label>
-                    <label htmlFor="new-blog-author">
-                        <span>Author</span>
-                        <input {...author} />
-                    </label>
-                    <label htmlFor="new-blog-url">
-                        <span>Url</span>
-                        <input {...url} />
-                    </label>
+        <div className="createBlog mt-3">
+            <Togglable showLabel="Create a new blog" ref={passRef} buttonPlacement="before">
+                <Form className="createBlogForm" heading="Create new" onSubmit={handleNewBlog}>
+                    <h2>Add a blog</h2>
+                    <Form.Group>
+                        <Form.Label>Title</Form.Label>
+                        <Form.Control {...content} />
+                    </Form.Group>
 
-                    <button type="submit">Create</button>
-                </form>
+                    <Form.Group>
+                        <Form.Label>Author</Form.Label>
+                        <Form.Control {...author} />
+                    </Form.Group>
+
+                    <Form.Group>
+                        <Form.Label>Url</Form.Label>
+                        <Form.Control {...url} />
+                    </Form.Group>
+
+                    <Button className="mb-2" variant="primary" type="submit">
+                        Create
+                    </Button>
+                </Form>
             </Togglable>
         </div>
     )
