@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/patients/ 
+Content-Type: application/json
+
+{
+    "name": "Jeesus Kristus",
+    "dateOfBirth": "1986-07-09",
+    "ssn": "090786-123X",
+    "gender": "male",
+    "occupation": 1432
+}
