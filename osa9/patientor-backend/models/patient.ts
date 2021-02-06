@@ -1,14 +1,8 @@
 import solidPatients from '../data/patients.json'
-import { NonSensitivePatient, Patient } from '../types'
-import { toNewPatient } from '../utils'
+import { NonSensitivePatient, Patient } from '../types/types'
+import { toNewPatient } from '../utils/utils'
 
-let patients: Array<Patient>
-try {
-    console.log('haha yes')
-    patients = solidPatients.map((patient) => toNewPatient(patient))
-} catch (e) {
-    console.log(e)
-}
+let patients: Array<Patient> = solidPatients.map((patient) => toNewPatient(patient))
 
 const getNonSensitivePatients = (): NonSensitivePatient[] => {
     if (!patients) return []

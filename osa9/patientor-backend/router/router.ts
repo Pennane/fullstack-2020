@@ -1,7 +1,7 @@
 import express from 'express'
 
-import Patient from './models/patient'
-import Diagnose from './models/diagnose'
+import Patient from '../models/patient'
+import Diagnose from '../models/diagnose'
 
 const router = express.Router()
 
