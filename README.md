@@ -1,7 +1,5 @@
 # [full stack open 2020](https://fullstackopen.com/)
 
-Osat:
-
 - [osa 0](/osa0)
   - [0.4](/osa0/0.4)
   - [0.5](/osa0/0.5)
@@ -16,7 +14,7 @@ Osat:
   - [maatiedot](/osa2/maatiedot)
 - [osa 3](/osa3)
   - [puhelinluettelo-frontend](/osa3/puhelinluettelo-frontend)
-  - [puhelinluettelo-backend](https://github.com/Pennane/fullstack-2020-part3)
+  - [puhelinluettelo-backend](/osa3/puhelinluettelo-backend)
   - [puhelinluettelo verkossa](https://pure-waters-34987.herokuapp.com/)
 - [osa 4](/osa4)
   - [blogilista-backend](/osa4/blogilista-backend)
