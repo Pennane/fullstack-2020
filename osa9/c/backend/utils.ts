@@ -1,5 +1,4 @@
 import { Patient } from './types'
-import patient from './models/patient'
 
 enum Gender {
     'male',
@@ -49,12 +48,8 @@ const parseSSN = (SSN: any): string => {
 }
 
 const generateId = (): string => {
-    console.log(patient)
-    // const patients = patient.get()
     let id: number
-    // do {
     id = Math.floor(Math.random() * 1000000000000)
-    // } while (patients.some((p) => p.id === String(id)))
     return String(id)
 }
 
