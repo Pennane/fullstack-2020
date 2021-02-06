@@ -10,11 +10,17 @@ router.get('/ping', (_req, res) => {
 })
 
 router.get('/patients', (_req, res) => {
-    res.json(Patient.get())
+    res.json(Patient.getAll())
 })
 
 router.get('/diagnoses', (_req, res) => {
-    res.json(Diagnose.get())
+    res.json(Diagnose.getAll())
+})
+
+router.get('/patients/:id', (req, res) => {
+    const patient = Patient.getById(req.params.id)
+    if (!patient) return res.status(404).send('No user found for that id')
+    return res.json(patient)
 })
 
 router.post('/patients', (req, res) => {

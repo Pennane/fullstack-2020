@@ -60,6 +60,7 @@ export const toNewPatient = (object: any): Patient => {
         gender: parseGender(object.gender),
         occupation: parseOccupation(object.occupation),
         ssn: parseSSN(object.ssn),
-        id: generateId()
+        id: generateId(),
+        entries: []
     }
 }
