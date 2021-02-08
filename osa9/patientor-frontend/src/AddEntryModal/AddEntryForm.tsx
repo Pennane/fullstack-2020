@@ -149,7 +149,6 @@ export const AddOccupationalEntryForm: React.FC<OccupationalProps> = ({ onSubmit
                     errors.type = 'Type is invalid. Try refreshing.'
                     return errors
                 }
-                console.log(values)
                 if (!values.description) {
                     errors.description = requiredError
                 }

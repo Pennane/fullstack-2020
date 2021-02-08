@@ -46,10 +46,8 @@ const addEntry = (patientId: string, data: any): Entry => {
     const patient = getPatientById(patientId)
     if (!patient) throw new Error(`Patient ${patientId} missing.`)
     const entry: Entry = { ...toNewEntry(data), id: generateId() }
-    console.log(patient.entries.length)
     const updatedEntries: Entry[] = patient.entries.concat(entry)
     const updatedPatient: Patient = { ...patient, entries: updatedEntries }
-    console.log(updatedPatient.entries.length)
     patients = patients.map((p) => (p.id !== updatedPatient.id ? p : updatedPatient))
     return entry
 }

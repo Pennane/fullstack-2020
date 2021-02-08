@@ -39,7 +39,6 @@ const HospitalEntryComponent = ({ entry }: { entry: HospitalEntry }) => {
 }
 
 const OccupationalEntryComponent = ({ entry }: { entry: OccupationalHealthCareEntry }) => {
-    console.log(entry)
     return (
         <div>
             <span>Employer: {entry.employerName} </span>

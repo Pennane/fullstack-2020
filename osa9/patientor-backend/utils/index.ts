@@ -83,7 +83,6 @@ const parseSickLeave = (sickLeave: any): OccupationalSickLeave | undefined => {
     if (!isSickLeave(sickLeave)) {
         throw new Error(`Incorrect sickLeave ${sickLeave}`)
     }
-    console.log(sickLeave)
     return sickLeave
 }
 
