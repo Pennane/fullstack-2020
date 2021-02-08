@@ -1,23 +1,17 @@
 /*https://stackoverflow.com/questions/57103834/typescript-omit-a-property-from-all-interfaces-in-a-union-but-keep-the-union-s*/
 export type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never
 
-export interface Diagnose {
-    code: string
-    name: string
-    latin?: string
-}
-
-export enum Gender {
-    Male = 'male',
-    Female = 'female',
-    Other = 'other'
-}
-
 export enum HealthCheckRating {
     'Healthy' = 0,
     'LowRisk' = 1,
     'HighRisk' = 2,
     'CriticalRisk' = 3
+}
+
+export interface Diagnose {
+    code: string
+    name: string
+    latin?: string
 }
 
 export interface EntryDischarge {
@@ -62,6 +56,12 @@ export type Entry = HospitalEntry | OccupationalHealthCareEntry | HealthCheckEnt
 
 export type NewEntry = DistributiveOmit<Entry, 'id'>
 
+export enum Gender {
+    Male = 'male',
+    Female = 'female',
+    Other = 'other'
+}
+
 export interface Patient {
     id: string
     name: string
@@ -71,3 +71,7 @@ export interface Patient {
     occupation: string
     entries: Entry[]
 }
+
+export type NewPatient = Omit<Patient, 'id'>
+
+export type PublicPatient = Omit<Patient, 'ssn' | 'entries'>
