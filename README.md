@@ -32,3 +32,8 @@
 - [osa 8](/osa8)
   - [library-backend](/osa8/library-backend)
   - [library-frontend](/osa8/library-frontend)
+- [osa 9](/osa9)
+  - [fisrt-exercises](/osa9/first-exercises)
+  - [ts-react-app](/osa9/ts-react-app)
+  - [patientor-backend](/osa9/patientor-backend)
+  - [patientor-frontend](/osa9/patientor-frontend)
